@@ -1,104 +1,114 @@
 <template>
-    <div class="login-wrap">
-        <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
-            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-user"></el-button>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                        type="password"
-                        placeholder="password"
-                        v-model="param.password"
-                        @keyup.enter.native="submitForm()"
-                    >
-                        <el-button slot="prepend" icon="el-icon-loading"></el-button>
-                    </el-input>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm()">登录</el-button>
-                </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
-            </el-form>
-        </div>
-    </div>
+  <div class="container">
+    <el-card>
+      <div class="head">
+        <span>登陆系统</span>
+      </div>
+      <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="form">
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="form.username" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" auto-complete="off" type="password"></el-input>
+        </el-form-item>
+        <el-form-item class="button-container">
+          <el-button type="primary" :loading="loginButtonLoading" @click="submitForm">登录</el-button>
+          <el-button type="default" @click="onGotoReg">注册</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
-export default {
-    data: function() {
-        return {
-            param: {
-                username: 'admin',
-                password: '123123',
-            },
-            rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-            },
-        };
+  import api from '../../utils/api.js'
+
+  export default {
+    data () {
+      return {
+        loginButtonLoading: false,
+        form: {
+          username: '',
+          password: ''
+        },
+        rules: {
+          username: [
+            { required: true, message: '请输入账号', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ]
+        }
+      }
     },
     methods: {
-        submitForm() {
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('token', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-    },
-};
+      submitForm () {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.requestLogin()
+          } else {
+            return false
+          }
+        })
+      },
+      onGotoReg () {
+        this.$router.push({
+          name: 'reg'
+        })
+      },
+      requestLogin () {
+        this.regButtonLoading = true
+
+        api.login({
+          'username': this.form.username,
+          'password': this.form.password
+        }, (res) => {
+          this.regButtonLoading = false
+
+          if (res.status === 200) {
+            const data = res.data
+            if (data.code === 0) {
+              this.$message.success('登录成功')
+              this.$router.push('/')
+            } else {
+              this.$message.error(data.message)
+            }
+          } else {
+            this.$message('请求超时')
+          }
+        })
+      }
+    }
+  }
 </script>
 
 <style scoped>
-.login-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-image: url(../../assets/img/login-bg.jpg);
-    background-size: 100%;
-}
-.ms-title {
-    width: 100%;
-    line-height: 50px;
-    text-align: center;
-    font-size: 20px;
-    color: #fff;
-    border-bottom: 1px solid #ddd;
-}
-.ms-login {
+  div.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 350px;
-    margin: -190px 0 0 -175px;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    overflow: hidden;
-}
-.ms-content {
-    padding: 30px 30px;
-}
-.login-btn {
-    text-align: center;
-}
-.login-btn button {
-    width: 100%;
-    height: 36px;
-    margin-bottom: 10px;
-}
-.login-tips {
-    font-size: 12px;
-    line-height: 30px;
-    color: #fff;
-}
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .head {
+    display: flex;
+    justify-content: center;
+  }
+  .head span {
+    height: 60px;
+    line-height: 60px;
+    color: #409EFF;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .form {
+    width: 400px;
+    padding: 20px 50px 20px 0;
+  }
+  .button-container {
+    display: flex;
+  }
 </style>
