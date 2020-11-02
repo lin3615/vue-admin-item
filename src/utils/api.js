@@ -41,6 +41,7 @@ const login = (params,callback) => {
             response.status === 200 &&
             response.data.code === 0){
                 localStorage.token = response.data.data.token
+                localStorage.ms_username = params.username
             }
             callback(response)
     })
