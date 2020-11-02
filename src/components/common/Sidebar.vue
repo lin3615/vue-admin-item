@@ -144,7 +144,12 @@ export default {
                             title: '404页面'
                         }
                     ]
-                }
+                },
+                {
+                    icon: 'el-icon-s-grid',
+                    index: 'test',
+                    title: '测试表格'
+                },
             ]
         };
     },
