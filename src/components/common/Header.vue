@@ -97,6 +97,7 @@ export default {
         handleCommand(command) {
             if (command == 'loginout') {
                 localStorage.removeItem('token');
+                localStorage.removeItem('ms_username')
                 this.$router.push('/login');
             }else if(command == 'changepwd'){
                 this.editVisible = true;
