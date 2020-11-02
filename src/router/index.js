@@ -96,6 +96,11 @@ export default new Router({
                     path: '/403',
                     component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
                     meta: { title: '403' }
+                },
+                {
+                    path: '/test',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/test.vue'),
+                    meta: { title: '测试表格用' }
                 }
             ]
         },
