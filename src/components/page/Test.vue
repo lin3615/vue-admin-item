@@ -15,11 +15,11 @@
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.typesearch" placeholder="用户名" class="handle-select mr10">
+                    <el-option key="1" label="用户名" value="1"></el-option>
+                    <el-option key="2" label="地址" value="2"></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="搜索内容" class="handle-input mr10" clearable></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
             <el-table
@@ -73,11 +73,11 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
+                    small
                     layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
-                    :total="pageTotal"
+                    :current-page="query.page"
+                    :page-size="query.pagesize"
+                    :total="total"
                     @current-change="handlePageChange"
                 ></el-pagination>
             </div>
@@ -85,12 +85,12 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+            <el-form ref="form88" :model="form88" label-width="70px">
                 <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form88.name"></el-input>
                 </el-form-item>
                 <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
+                    <el-input v-model="form88.address"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -102,76 +102,58 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+import api from '../../utils/api.js'
 export default {
     name: 'basetable',
     data() {
         return {
             query: {
-                address: '',
+                typesearch: '',
                 name: '',
-                pageIndex: 1,
-                pageSize: 10
+                page: 1,
+                pagesize: 10
             },
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
             pageTotal: 0,
+            total:0,
             form: {},
             idx: -1,
-            id: -1
+            id: -1,
+            form88:{}
         };
     },
     created() {
-        this.getData();
+        this.getData('test/testList',1,10,this.query);
     },
     methods: {
         // 获取 easy-mock 的模拟数据
-        getData() {
-            this.pageTotal = 4;
-            this.tableData = [{
-            "id": 1,
-            "name": "张三",
-            "money": 123,
-            "address": "广东省东莞市长安镇",
-            "state": "成功",
-            "date": "2019-11-1",
-            "thumb": "https://gitee.com/static/images/logo-black.svg"
-        },
-        {
-            "id": 2,
-            "name": "李四",
-            "money": 456,
-            "address": "广东省广州市白云区",
-            "state": "成功",
-            "date": "2019-10-11",
-            "thumb": "https://gitee.com/static/images/logo-black.svg"
-        },
-        {
-            "id": 3,
-            "name": "王五",
-            "money": 789,
-            "address": "湖南省长沙市",
-            "state": "失败",
-            "date": "2019-11-11",
-            "thumb": "https://gitee.com/static/images/logo-black.svg"
-        },
-        {
-            "id": 4,
-            "name": "赵六",
-            "money": 1011,
-            "address": "福建省厦门市鼓浪屿",
-            "state": "成功",
-            "date": "2019-10-20",
-            "thumb": "https://gitee.com/static/images/logo-black.svg"
-        }
-    ]
+        getData(url,page,pagesize,params) {
+            api.testData(url,{
+            page: page,
+            pagesize: pagesize,
+            params:params
+            }, (res) => {
+            if (res.status === 200) {
+                const data = res.data
+                if (data.code === 0) {
+                this.tableData = data.data.list;
+                this.total = data.data.total;
+                } else {
+                this.$message(data.message)
+                }
+            } else {
+                this.$message('请求超时')
+            }
+            })    
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+           // alert(this.query.typesearch)
+            this.$set(this.query, 'page', 1);
+            this.getData('test/testList',1,10,this.query);
         },
         // 删除操作
         handleDelete(index, row) {
@@ -202,19 +184,37 @@ export default {
         // 编辑操作
         handleEdit(index, row) {
             this.idx = index;
-            this.form = row;
+            this.form88 = row;
             this.editVisible = true;
         },
         // 保存编辑
         saveEdit() {
+            // console.log(this.$refs['form88'].model)
+            // console.log(this.$refs['form88'].model.address)
+            // return true
+            let name = this.$refs['form88'].model.name;
+            let address = this.$refs['form88'].model.address;
+            let id = this.$refs['form88'].model.id;
+            api.updateData('test/testUpdate',{name:name,address:address,id:id},(res) => {
+                if (res.status === 200) {
+                    const data = res.data
+                    if (data.code === 0) {
+                        this.$message.success(data.message)
+                    } else {
+                        this.$message.error(data.message)
+                    }
+                } else {
+                    this.$message('请求超时,请稍后再试')
+                } 
+            })
             this.editVisible = false;
-            this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-            this.$set(this.tableData, this.idx, this.form);
+  //          this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+            this.$set(this.tableData, this.idx, this.form88);
         },
-        // 分页导航
+        // 分页导航 val 页码
         handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
-            this.getData();
+            this.$set(this.query, 'page', val);
+            this.getData('test/testList',val,10,this.query);
         }
     }
 };
