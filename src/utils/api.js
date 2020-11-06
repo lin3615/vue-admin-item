@@ -46,8 +46,43 @@ const login = (params,callback) => {
             callback(response)
     })
 }
+
+const testData = (url,params,callback) => {
+    var data = new URLSearchParams()
+    data.append('page',params.page)
+    data.append('pagesize',params.pagesize)
+    data.append('typesearch',params.params.typesearch)
+    data.append('name',params.params.name)
+    request(url,data,(response) => {
+        if(response &&
+            response.status === 200 &&
+            response.data.code ===0){
+                callback(response)
+            }else{
+                callback(response)
+            }
+    })
+}
+
+const updateData = (url,param,callback) => {
+    var data = new URLSearchParams()
+    data.append('address',param.address)
+    data.append('name',param.name)
+    data.append('id',param.id)
+    request(url,data,(response) => {
+        if(response &&
+            response.status === 200 && 
+            response.data.code === 0){
+                callback(response)
+            }else{
+                callback(response)
+            }
+    })
+}
 const api = {
     reg:reg,
-    login:login
+    login:login,
+    testData:testData,
+    updateData:updateData
 }
 export default api
