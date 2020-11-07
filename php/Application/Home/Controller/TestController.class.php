@@ -7,6 +7,23 @@ namespace Home\Controller;
 
 class TestController extends BaseController
 {
+
+	public function testDelete(){
+		//	$this->validToken();
+		$id = I('id');
+		if(!$id || intval($id) < 1){
+			$this->jsonReturn(-1, '非法操作', null);
+		}
+		$sql = "delete from test where id = {$id}";
+		$res=M()->execute($sql);
+		if($res !== false){
+			$this->jsonReturn(0, '删除成功', null);
+		}else{
+			$this->jsonReturn(-1, '删除失败，请稍后再试', null);
+		}
+	
+	}
+
 	public function testUpdate(){
 		//	$this->validToken();
 		
