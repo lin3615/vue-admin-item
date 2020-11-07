@@ -79,10 +79,29 @@ const updateData = (url,param,callback) => {
             }
     })
 }
+
+/**
+ * 删除数据
+ */
+const deleteData = (url,param,callback) => {
+    var data = new URLSearchParams()
+    data.append('id',param.id)
+    request(url,data,(response) => {
+        if(response &&
+            response.status === 200 && 
+            response.data.code === 0){
+                callback(response)
+            }else{
+                callback(response)
+            }
+    })
+
+}
 const api = {
     reg:reg,
     login:login,
     testData:testData,
-    updateData:updateData
+    updateData:updateData,
+    deleteData:deleteData
 }
 export default api
