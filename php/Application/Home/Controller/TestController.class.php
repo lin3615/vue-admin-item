@@ -8,6 +8,24 @@ namespace Home\Controller;
 class TestController extends BaseController
 {
 
+	public function testDeleteMulti(){
+		//	$this->validToken();
+		$ids = I('ids');
+		if(!$ids){
+			$this->jsonReturn(-1, '没有选择要删除的数据', null);
+		}
+		$idArr = explode(',',$ids);
+		$length = count($idArr) - 1;
+		unset($idArr[$length]);
+		$sql = "delete from test where id in (" . implode(',',$idArr) . ")";
+
+		$res=M()->execute($sql);
+		if($res !== false){
+			$this->jsonReturn(0, '删除成功', null);
+		}else{
+			$this->jsonReturn(-1, '删除失败，请稍后再试', null);
+		}
+	}
 	public function testDelete(){
 		//	$this->validToken();
 		$id = I('id');
