@@ -7,6 +7,57 @@ namespace Home\Controller;
 
 class TestController extends BaseController
 {
+	public function testPostTbaseForm(){
+		// 通过 I('date1'), I('type') 接收值
+		$this->jsonReturn(0, '查询成功', $_REQUEST);
+	}
+
+
+	public function testGetTbaseform(){
+		$list = array();
+		$list[0]['value'] = 'guangdong';
+		$list[0]['label'] = '广东省';
+
+		$list[0]['children'][0]['value'] = 'guangzhou';
+		$list[0]['children'][0]['label'] = '广州市';
+
+		$list[0]['children'][0]['children'][0]['value'] = 'tianhe';
+		$list[0]['children'][0]['children'][0]['label'] = '天河区';
+		$list[0]['children'][0]['children'][1]['value'] = 'haizhu';
+		$list[0]['children'][0]['children'][1]['label'] = '海珠区';
+
+		$list[0]['children'][1]['value'] = 'dongguan';
+		$list[0]['children'][1]['label'] = '东莞市';
+
+		$list[0]['children'][1]['children'][0]['value'] = 'changan';
+		$list[0]['children'][1]['children'][0]['label'] = '长安镇';
+		$list[0]['children'][1]['children'][1]['value'] = 'humen';
+		$list[0]['children'][1]['children'][1]['label'] = '虎门镇';
+
+		$list[1]['value'] = 'guangxi';
+		$list[1]['label'] = '广西壮族自治区';
+
+		$list[1]['children'][0]['value'] = 'nanning';
+		$list[1]['children'][0]['label'] = '南宁市';
+
+		$list[1]['children'][0]['children'][0]['value'] = 'qingxiu';
+		$list[1]['children'][0]['children'][0]['label'] = '青秀区';
+		$list[1]['children'][0]['children'][1]['value'] = 'xitang';
+		$list[1]['children'][0]['children'][1]['label'] = '西塘区';
+
+		$list[1]['children'][1]['value'] = 'guilin';
+		$list[1]['children'][1]['label'] = '桂林市';
+
+		$list[1]['children'][1]['children'][0]['value'] = 'qixing';
+		$list[1]['children'][1]['children'][0]['label'] = '七星区';
+		$list[1]['children'][1]['children'][1]['value'] = 'xiufeng';
+		$list[1]['children'][1]['children'][1]['label'] = '秀峰区';
+		$data = array('list' => $list);
+		$data['name']= 'testForm';
+		$data['region']= '小天才';
+		$data['date1']= date('Y-m-d');
+		$this->jsonReturn(0, '查询成功', $data);
+	}
 
 	public function testDeleteMulti(){
 		//	$this->validToken();

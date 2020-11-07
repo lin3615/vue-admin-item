@@ -101,6 +101,11 @@ export default new Router({
                     path: '/test',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/test.vue'),
                     meta: { title: '测试表格用' }
+                },
+                {
+                    path: '/tbaseform',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/Tbaseform.vue'),
+                    meta: { title: '测试基础表单' }
                 }
             ]
         },

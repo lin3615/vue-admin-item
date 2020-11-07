@@ -114,12 +114,55 @@ const deleteMultiData = (url,param,callback) => {
             }
     })
 }
+
+/**
+ * 获取基本表单数据
+ */
+const testGetTbaseform = (url,param,callback) => {
+    var data = new URLSearchParams()
+    request(url,data,(response) => {
+        if(response &&
+            response.status === 200 && 
+            response.data.code === 0){
+                callback(response)
+            }else{
+                callback(response)
+            }
+    })
+}
+
+/**
+ * 基本表单提交
+ */
+const tbaseform = (url,param,callback) => {
+    var data = new URLSearchParams()
+    data.append("date1",param.date1)
+    data.append("date2",param.date2)
+    data.append("delivery",param.delivery)
+    data.append("desc",param.desc)
+    data.append("name",param.name)
+    data.append("region",param.region)
+    data.append("options",param.options)
+    data.append("resource",param.resource)
+    data.append("type",param.type)
+    request(url,data,(response) => {
+        if(response &&
+            response.status === 200 && 
+            response.data.code === 0){
+                callback(response)
+            }else{
+                callback(response)
+            }
+    })
+}
 const api = {
     reg:reg,
     login:login,
     testData:testData,
     updateData:updateData,
     deleteData:deleteData,
-    deleteMultiData:deleteMultiData
+    deleteMultiData:deleteMultiData,
+    tbaseform:tbaseform,
+    testGetTbaseform:testGetTbaseform
 }
 export default api
