@@ -189,10 +189,27 @@ export default {
         delAllSelection() {
             const length = this.multipleSelection.length;
             let str = '';
+            let ids = '';
             this.delList = this.delList.concat(this.multipleSelection);
             for (let i = 0; i < length; i++) {
                 str += this.multipleSelection[i].name + ' ';
+                ids += this.multipleSelection[i].id +',';
             }
+            
+            api.deleteMultiData('test/testDeleteMulti',{ids:ids},(res) => {
+                if (res.status === 200) {
+                    const data = res.data
+                    if (data.code === 0) {
+                        this.$message.success('删除成功');
+                        this.getData('test/testList',1,10,this.query);
+                    } else {
+                        this.$message.error(data.message)
+                    }
+                } else {
+                    this.$message('请求超时,请稍后再试')
+                } 
+            })
+
             this.$message.error(`删除了${str}`);
             this.multipleSelection = [];
         },
