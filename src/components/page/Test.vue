@@ -162,8 +162,23 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+                    let id = row.id
+                    api.deleteData('test/testDelete',{id:id},(res) => {
+                        if (res.status === 200) {
+                            const data = res.data
+                            if (data.code === 0) {
+                                // this.$message.success(data.message)
+                                this.$message.success('删除成功');
+                                this.tableData.splice(index, 1);
+                            } else {
+                                this.$message.error(data.message)
+                            }
+                        } else {
+                            this.$message('请求超时,请稍后再试')
+                        } 
+                    })
+                    // this.$message.success('删除成功');
+                    // this.tableData.splice(index, 1);
                 })
                 .catch(() => {});
         },
