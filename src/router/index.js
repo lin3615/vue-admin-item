@@ -106,7 +106,12 @@ export default new Router({
                     path: '/tbaseform',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/Tbaseform.vue'),
                     meta: { title: '测试基础表单' }
-                }
+                },
+                {
+                    path: '/twangeditor',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/Twangeditor.vue'),
+                    meta: { title: 'wangeditor' }
+                },
             ]
         },
         {

@@ -150,10 +150,15 @@ export default {
                     index: 'test',
                     title: '测试表格'
                 },
-                                {
+                {
                     icon: 'el-icon-s-grid',
                     index: 'tbaseform',
                     title: '测试基本表单'
+                },
+                                {
+                    icon: 'el-icon-s-grid',
+                    index: 'twangeditor',
+                    title: 'wangeditor富文本'
                 },
             ]
         };
