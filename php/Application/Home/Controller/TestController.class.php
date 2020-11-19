@@ -7,6 +7,62 @@ namespace Home\Controller;
 
 class TestController extends BaseController
 {
+	public function testUploadImage(){
+		$rootImage = 'Public/images/';
+		$allowedExts = array("gif", "jpeg", "jpg", "png");
+		$lastFileName = date('Y-m-dHis',time()) . '-'.rand(1000,9999);
+		foreach($_FILES as $inputFileName => $fileField){
+			$temp = explode(".", $_FILES[$inputFileName]["name"]);
+			$extension = end($temp);
+			if(!in_array($extension, $allowedExts)){
+				echo '只能上传图片';
+				exit;
+			}
+			if(is_uploaded_file($_FILES[$inputFileName]['tmp_name'])){
+				if($_FILES[$inputFileName]['error'] == 0){
+
+					if ($_FILES[$inputFileName]["type"] == "image/gif"){
+						$lastFileName .= '.gif';	
+					}elseif($_FILES[$inputFileName]["type"] == "image/jpeg"){
+						$lastFileName .= '.jpeg';	
+					}elseif($_FILES[$inputFileName]["type"] == "image/jpg"){
+						$lastFileName .= '.jpg';
+					}elseif($_FILES[$inputFileName]["type"] == "image/pjpeg"){
+						$lastFileName .= '.pjpeg';
+					}elseif($_FILES[$inputFileName]["type"] == "image/x-png"){
+						$lastFileName .= '.png';
+					}elseif($_FILES[$inputFileName]["type"] == "image/png"){
+						$lastFileName .= '.png';
+					}
+
+					$imageName = $rootImage . $lastFileName;
+
+					if(move_uploaded_file($_FILES[$inputFileName]['tmp_name'], $imageName)){
+						//echo 'http://vuephp.com/' . $imageName;
+						// echo '成功上传';
+						$returnUrl = 'http://vuephp.com/' . $imageName;
+						$returnData = array('errno' => 0,
+											'data'=>array($returnUrl));
+						echo json_encode($returnData);
+					}else{
+						echo '上传失败，不能转移文件到相应的文件';
+					}
+				}else if($_FILES[$inputFileName]['error'] == 1){
+					echo '上传文件超过php.ini中的最大大小';
+				}else if($_FILES[$inputFileName]['error'] == 2){
+					echo '上传文件大小超过 html表单中的大小';
+				}else if($_FILES[$inputFileName]['error'] == 3){
+					echo '文件只有部分上传';
+				}else if($_FILES[$inputFileName]['error'] == 4){
+					echo '没有文件被上传';
+				}else if($_FILES[$inputFileName]['error'] == 6){
+					echo '找不到临时文件夹';
+				}else{
+					echo '文件写入失败!';
+				}
+			}
+		}
+	}
 	public function testPostTbaseForm(){
 		// 通过 I('date1'), I('type') 接收值
 		$this->jsonReturn(0, '查询成功', $_REQUEST);
