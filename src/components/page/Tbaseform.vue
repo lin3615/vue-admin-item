@@ -64,6 +64,22 @@
                     <el-form-item label="文本框">
                         <el-input type="textarea" rows="5" v-model="form66.desc"></el-input>
                     </el-form-item>
+                    
+                        <el-upload
+                        class="upload-demo"
+                        ref="upload"
+                        action="/interface/test/testUploadElementImage"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :file-list="fileList"
+                        :auto-upload="false"
+                        list-type="picture">
+                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                   
+
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">表单提交</el-button>
                         <el-button>取消</el-button>
@@ -81,6 +97,7 @@ export default {
     data() {
         return {
             options:[],
+            fileList:[],
             form66: {
                 name: '',
                 region: '',
@@ -114,6 +131,16 @@ export default {
             })
             // this.$message.success('提交成功！')
         },
+
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },       
 
         testGetTbaseform(){
             api.testGetTbaseform('test/testGetTbaseform',{}, (res) => {
