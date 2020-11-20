@@ -7,6 +7,11 @@ namespace Home\Controller;
 
 class TestController extends BaseController
 {
+	public function testUploadElementImage(){
+		print_r($_FILES);
+		echo "\n post \n";
+		print_r($_POST);
+	}
 	public function testUploadImage(){
 		$rootImage = 'Public/images/';
 		$allowedExts = array("gif", "jpeg", "jpg", "png");
