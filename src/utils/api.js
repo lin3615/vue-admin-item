@@ -1,8 +1,10 @@
 import axios from 'axios'
 import router from '../router'
+import define from './define'
 
 const request = (url,data,callback) => {
-    axios.post('/interface/'+url,data)
+    // console.log('/interface/index.php'+url)
+    axios.post(define.interfaceway+url,data)
     .then((response) => {
         if(response && response.status === 200 &&
             response.data.code === 1000){
