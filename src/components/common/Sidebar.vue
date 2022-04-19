@@ -67,6 +67,12 @@ export default {
                     title: '基础表格'
                 },
                 {
+                    icon: 'el-icon-document',
+                    index: 'vuexcom',
+                    title: 'Vuex组件'
+    
+                },
+                {
                     icon: 'el-icon-document-copy',
                     index: 'tabs',
                     title: 'tab选项卡'

@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+// 懒加载模式
+const Vuexcom = () => import('../components/page/Vuexcom')
+
 Vue.use(Router);
 
 export default new Router({
@@ -28,6 +31,11 @@ export default new Router({
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
                     meta: { title: '基础表格' }
+                },
+                {
+                    path: '/Vuexcom',
+                    component: Vuexcom,
+                    meta: {title: 'Vuex组件'}
                 },
                 {
                     path: '/tabs',

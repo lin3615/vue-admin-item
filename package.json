@@ -22,6 +22,7 @@
     "vue-router": "^3.0.1",
     "vue-schart": "^2.0.0",
     "vuedraggable": "^2.24.3",
+    "vuex": "^3.6.2",
     "wangeditor": "^4.4.2"
   },
   "devDependencies": {
